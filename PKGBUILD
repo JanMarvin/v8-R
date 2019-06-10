@@ -15,7 +15,7 @@ url="https://v8.dev"
 license=('BSD')
 depends=('icu')
 optional=('rlwrap')
-makedepends=('clang' 'clang-tools-extra' 'llvm' 'python2' 'python2-colorama' 'python2-pylint' 'python2-lazy-object-proxy' 'python2-singledispatch' 'python2-wrapt' 'ninja' 'git' 'wget')
+makedepends=('clang' 'clang-tools-extra' 'lld' 'llvm' 'python2' 'python2-colorama' 'python2-pylint' 'python2-lazy-object-proxy' 'python2-singledispatch' 'python2-wrapt' 'ninja' 'git' 'wget')
 conflicts=('v8-3.14' 'v8-3.15' 'v8-3.20' 'v8-static-gyp' 'v8-static-gyp-5.4')
 source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot_tools.git"
         "v8.pc"
