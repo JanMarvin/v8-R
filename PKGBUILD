@@ -7,7 +7,7 @@
 # Contributor: Jan Marvin Garbuszus <jan.garbuszus@rub.de>
 
 pkgname=v8
-pkgver=7.8.186
+pkgver=7.8.230
 pkgrel=1
 pkgdesc="Fast and modern Javascript engine used in Google Chrome."
 arch=('x86_64')
