@@ -15,7 +15,7 @@ url="https://v8.dev"
 license=('BSD')
 depends=('icu')
 optional=('rlwrap')
-makedepends=('clang' 'clang-tools-extra' 'lld' 'llvm' 'python2' 'python2-colorama' 'python2-pylint' 'python2-lazy-object-proxy' 'python2-singledispatch' 'python2-wrapt' 'ninja' 'git' 'wget')
+makedepends=('clang' 'clang-tools-extra' 'lld' 'llvm' 'python3' 'ninja' 'git' 'wget')
 conflicts=('v8-3.14' 'v8-3.15' 'v8-3.20' 'v8-static-gyp' 'v8-static-gyp-5.4')
 source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot_tools.git"
         "v8.pc"
@@ -28,23 +28,12 @@ sha256sums=('SKIP'
             'ae23d543f655b4d8449f98828d0aff6858a777429b9ebdd2e23541f89645d4eb'
             '6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0')
 
-
-case "$CARCH" in
-  x86_64) V8_ARCH="x64" ;;
-esac
-
 OUTFLD=out.gn/Release
 
 prepare() {
 
   export CC=/usr/bin/clang
   export CXX=/usr/bin/clang++
-
-  # Switching to python2 system environment
-  mkdir -p bin
-  ln -sf /usr/bin/python2 ./bin/python
-  ln -sf /usr/bin/python2-config ./bin/python-config
-  msg2 "Using: `which python`"
 
   export PATH=${srcdir}/bin:`pwd`/depot_tools:"$PATH"
   export GYP_GENERATORS=ninja
@@ -62,7 +51,7 @@ prepare() {
   if [ -f third_party/icu/BUILD.gn.orig ]
   then
       msg2 "Restoring bundled ICU build files for syncing"
-      python2 $srcdir/v8/build/linux/unbundle/replace_gn_files.py --undo --system-libraries icu
+      $srcdir/v8/build/linux/unbundle/replace_gn_files.py --undo --system-libraries icu
   fi
 
   msg2 "Syncing, this can take a while..."
@@ -113,7 +102,7 @@ check() {
   tools/run-tests.py --no-presubmit \
                      --outdir=out.gn \
                      --buildbot \
-                     --arch=$V8_ARCH \
+                     --arch="x64" \
                      --mode=Release || true
 }
 
