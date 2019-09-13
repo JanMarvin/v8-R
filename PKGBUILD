@@ -6,8 +6,8 @@
 # Contributor: David Flemström <david.flemstrom@gmail.com>
 # Contributor: Jan Marvin Garbuszus <jan.garbuszus@rub.de>
 
-pkgname=v8
-pkgver=7.9.8
+pkgname=v8-R
+pkgver=7.9.37
 pkgrel=1
 pkgdesc="Fast and modern Javascript engine used in Google Chrome."
 arch=('x86_64')
