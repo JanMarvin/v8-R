@@ -15,8 +15,8 @@ url="https://v8.dev"
 license=('BSD')
 depends=('icu')
 optional=('rlwrap')
-makedepends=('clang' 'clang-tools-extra' 'lld' 'llvm' 'python2' 'ninja' 'git' 'wget')
-conflicts=('v8-3.14' 'v8-3.15' 'v8-3.20' 'v8-static-gyp' 'v8-static-gyp-5.4')
+makedepends=('clang' 'clang-tools-extra' 'lld' 'llvm' 'python2' 'git' 'wget')
+conflicts=('v8' 'v8-3.14' 'v8-3.15' 'v8-3.20' 'v8-static-gyp' 'v8-static-gyp-5.4')
 source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot_tools.git"
         "v8.pc"
         "v8_libbase.pc"
@@ -34,6 +34,12 @@ prepare() {
 
   export CC=/usr/bin/clang
   export CXX=/usr/bin/clang++
+
+  # Switching to python2 system environment
+  mkdir -p bin
+  ln -sf /usr/bin/python2 ./bin/python
+  ln -sf /usr/bin/python2-config ./bin/python-config
+  msg2 "Using: `which python`"
 
   export PATH=${srcdir}/bin:`pwd`/depot_tools:"$PATH"
   export GYP_GENERATORS=ninja
