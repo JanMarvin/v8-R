@@ -1,10 +1,10 @@
-# Maintainer: Marco Pompili <aur (at) mg.odd.red>
+# Maintainer: Jan Marvin Garbuszus <jan.garbuszus@rub.de>
+# Contributor: Marco Pompili <aur (at) mg.odd.red>
 # Contributor: Anatol Pomozov <anatol.pomozov@gmail.com>
 # Contributor: Bartłomiej Piotrowski <nospam@bpiotrowski.pl>
 # Contributor: Kaiting Chen <kaitocracy@gmail.com>
 # Contributor: tocer <tocer.deng@gmail.com>
 # Contributor: David Flemström <david.flemstrom@gmail.com>
-# Contributor: Jan Marvin Garbuszus <jan.garbuszus@rub.de>
 
 pkgname=v8-R
 pkgver=7.9.81
