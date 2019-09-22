@@ -6,7 +6,7 @@
 # Contributor: tocer <tocer.deng@gmail.com>
 # Contributor: David Flemström <david.flemstrom@gmail.com>
 
-pkgname=v8-R
+pkgname=v8-r
 pkgver=7.9.81
 pkgrel=1
 pkgdesc="Fast and modern Javascript engine used in Google Chrome."
@@ -17,6 +17,7 @@ depends=('icu')
 optional=('rlwrap')
 makedepends=('clang' 'clang-tools-extra' 'lld' 'llvm' 'python2' 'git' 'wget')
 conflicts=('v8' 'v8-3.14' 'v8-3.15' 'v8-3.20' 'v8-static-gyp' 'v8-static-gyp-5.4')
+provides=('v8')
 source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot_tools.git"
         "v8.pc"
         "v8_libbase.pc"
