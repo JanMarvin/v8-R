@@ -143,6 +143,13 @@ package() {
 
   install -d ${pkgdir}/usr/share/licenses/v8
   install -m644 LICENSE* ${pkgdir}/usr/share/licenses/v8
+
+  cd $srcdir
+  if [ -d "bin" ]; then
+    msg2 "cleanup leftover python binaries"
+    rm -rf "bin"
+  fi
+
 }
 
 # vim:set ts=2 sw=2 et:
