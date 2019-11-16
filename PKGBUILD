@@ -7,7 +7,7 @@
 # Contributor: David Flemström <david.flemstrom@gmail.com>
 
 pkgname=v8-r
-pkgver=8.0.212
+pkgver=8.0.285
 pkgrel=1
 pkgdesc="Fast and modern Javascript engine used in Google Chrome."
 arch=('x86_64')
@@ -109,7 +109,6 @@ check() {
   msg2 "Testing, this will also take a while..."
   tools/run-tests.py --no-presubmit \
                      --outdir=out.gn \
-                     --buildbot \
                      --arch="x64" \
                      --mode=Release || true
 }
