@@ -9,7 +9,7 @@
 pkgname=v8-r
 pkgver=8.1.277
 pkgrel=1
-pkgdesc="Fast and modern Javascript engine used in Google Chrome."
+pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
 url="https://v8.dev"
 license=('BSD')
@@ -125,9 +125,9 @@ package() {
   install -Dm755 $OUTFLD/libv8_libplatform.so ${pkgdir}/usr/lib/libv8_libplatform.so
   install -Dm755 $OUTFLD/libchrome_zlib.so ${pkgdir}/usr/lib/libchrome_zlib.so
 
-  install -Dm755 $OUTFLD/cctest ${pkgdir}/usr/lib/v8/cctest
-  install -Dm755 $OUTFLD/libv8_for_testing.so ${pkgdir}/usr/lib/libv8_for_testing.so
-  install -Dm755 $OUTFLD/libv8_debug_helper.so ${pkgdir}/usr/lib/libv8_debug_helper.so
+  # install -Dm755 $OUTFLD/cctest ${pkgdir}/usr/lib/v8/cctest
+  # install -Dm755 $OUTFLD/libv8_for_testing.so ${pkgdir}/usr/lib/libv8_for_testing.so
+  # install -Dm755 $OUTFLD/libv8_debug_helper.so ${pkgdir}/usr/lib/libv8_debug_helper.so
 
   install -d ${pkgdir}/usr/include
   install -Dm644 include/*.h ${pkgdir}/usr/include
