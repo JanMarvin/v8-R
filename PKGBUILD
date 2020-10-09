@@ -7,7 +7,7 @@
 # Contributor: David Flemström <david.flemstrom@gmail.com>
 
 pkgname=v8-r
-pkgver=8.7.245
+pkgver=8.8.63
 pkgrel=1
 pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
@@ -108,9 +108,8 @@ check() {
 
   msg2 "Testing, this will also take a while..."
   python2  tools/run-tests.py --no-presubmit \
-                              --outdir=out.gn \
-                              --arch="x64" \
-                              --mode=Release || true
+                              --outdir=out.gn/Release \
+                              --arch="x64" || true
 }
 
 package() {
