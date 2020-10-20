@@ -22,14 +22,12 @@ source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot
         "v8.pc"
         "v8_libbase.pc"
         "v8_libplatform.pc"
-        "d8"
-        "unknown_option.diff")
+        "d8")
 sha256sums=('SKIP'
             '3616bcfb15af7cd5a39bc0f223b2a52f15883a4bc8cfcfb291837c7421363d75'
             'efb37bd706e6535abfa20c77bb16597253391619dae275627312d00ee7332fa3'
             'ae23d543f655b4d8449f98828d0aff6858a777429b9ebdd2e23541f89645d4eb'
-            '6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0'
-            '4e8135a5cc22f84f18fd91a323b6aefb05220052bf4cc4dae6e3a37ebe1ba0d0')
+            '6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0')
 
 OUTFLD=out.gn/Release
 
