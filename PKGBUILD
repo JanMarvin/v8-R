@@ -7,7 +7,7 @@
 # Contributor: David Flemström <david.flemstrom@gmail.com>
 
 pkgname=v8-r
-pkgver=8.8.110
+pkgver=8.8.150
 pkgrel=1
 pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
@@ -29,7 +29,7 @@ sha256sums=('SKIP'
             'ae23d543f655b4d8449f98828d0aff6858a777429b9ebdd2e23541f89645d4eb'
             '6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0')
 
-OUTFLD=out.gn/Release
+OUTFLD=x86.release
 
 prepare() {
 
@@ -80,6 +80,10 @@ prepare() {
     use_custom_libcxx=false
     use_sysroot=false'
 
+  # Fixes bug in generate_shim_headers.py that fails to create these dirs
+  msg2 "Adding icu missing folders"
+  mkdir -p "$OUTFLD/gen/shim_headers/icuuc_shim/third_party/icu/source/common/unicode/"
+  mkdir -p "$OUTFLD/gen/shim_headers/icui18n_shim/third_party/icu/source/i18n/unicode/"
 }
 
 build() {
@@ -87,11 +91,6 @@ build() {
   export GYP_GENERATORS=ninja
 
   cd $srcdir/v8
-  
-  # Fixes bug in generate_shim_headers.py that fails to create these dirs
-  msg2 "Adding icu missing folders"
-  mkdir -p "$OUTFLD/gen/shim_headers/icuuc_shim/third_party/icu/source/common/unicode/"
-  mkdir -p "$OUTFLD/gen/shim_headers/icui18n_shim/third_party/icu/source/i18n/unicode/"
 
   msg2 "Building, this will take a while..."
   ninja -C $OUTFLD
@@ -102,7 +101,7 @@ check() {
 
   msg2 "Testing, this will also take a while..."
   python2  tools/run-tests.py --no-presubmit \
-                              --outdir=out.gn/Release \
+                              --outdir=$OUTFLD \
                               --arch="x64" || true
 }
 
