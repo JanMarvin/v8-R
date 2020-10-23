@@ -7,7 +7,7 @@
 # Contributor: David Flemström <david.flemstrom@gmail.com>
 
 pkgname=v8-r
-pkgver=8.8.150
+pkgver=8.8.166
 pkgrel=1
 pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
@@ -59,26 +59,25 @@ prepare() {
   msg2 "Using system libraries for ICU"
   $srcdir/v8/build/linux/unbundle/replace_gn_files.py --system-libraries icu
 
+  # provide pkgconfig files
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8.pc"
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8_libbase.pc"
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8_libplatform.pc"
   
   msg2 "Running GN..."
-  $srcdir/depot_tools/gn gen $OUTFLD \
+  gn gen $OUTFLD \
     -vv --fail-on-unused-args \
-    --args='clang_base_path="/usr/"
-    is_clang=false
-    is_asan=false
-    use_gold=false
-    clang_use_chrome_plugins=false
-    is_component_build=true
-    is_debug=false
-    is_official_build=false
-    treat_warnings_as_errors=false
-    v8_enable_i18n_support=true
-    v8_use_external_startup_data=false
-    use_custom_libcxx=false
-    use_sysroot=false'
+    --args='is_clang=false
+            is_asan=false
+            use_gold=false
+            is_component_build=true
+            is_debug=false
+            is_official_build=false
+            treat_warnings_as_errors=false
+            v8_enable_i18n_support=true
+            v8_use_external_startup_data=false
+            use_custom_libcxx=false
+            use_sysroot=false'
 
   # Fixes bug in generate_shim_headers.py that fails to create these dirs
   msg2 "Adding icu missing folders"
