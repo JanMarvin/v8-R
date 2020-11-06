@@ -27,7 +27,7 @@ jobs:
       - name: copy
         run: |
           docker run -d --name myrun mybuild
-          docker cp myrun:/"v8-r-${{ matrix.version }}-x86_64.tar.zst" .
+          docker cp myrun:/home/archie/v8-r-${{ matrix.version }}-x86_64.tar.zst .
           docker stop myrun
 
       - name: store
