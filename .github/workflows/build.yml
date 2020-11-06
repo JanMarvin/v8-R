@@ -14,6 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         distro: [ 'arch' ]
+        version: [ '8.8.243' ]
 
     steps:
       - name: checkout
@@ -26,11 +27,11 @@ jobs:
       - name: copy
         run: |
           docker run -d --name myrun mybuild
-          docker cp myrun:/"v8-r-*-x86_64.tar.zst" .
+          docker cp myrun:/"v8-r-${{ matrix.version }}-x86_64.tar.zst" .
           docker stop myrun
 
       - name: store
         uses: actions/upload-artifact@v2
         with:
-          name: "v8-r-*.tar.zst"
-          path: "v8-r-*.tar.xz"
+          name: v8-r-${{ matrix.version }}.tar.zst
+          path: v8-r-${{ matrix.version }}-x86_64.tar.xz

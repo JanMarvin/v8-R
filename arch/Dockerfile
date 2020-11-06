@@ -10,7 +10,7 @@ USER archie
 
 RUN git clone https://github.com/JanMarvin/v8-r 
 
-WORKDIR v8-r
+WORKDIR /v8-r
 
 RUN makepkg
 
