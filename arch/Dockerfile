@@ -2,9 +2,9 @@ FROM archlinux:latest
 
 ENV target v8-r
 
-RUN pacman -Syu --noconfirm && pacman -S python2 python3 git icu rlwrap --noconfirm
+RUN pacman -Syu --noconfirm && pacman -S python2 python3 git rlwrap --noconfirm
 
-RUN useradd -r -s /usr/bin/nologin archie
+RUN useradd -m archie
 
 RUN su archie
 
