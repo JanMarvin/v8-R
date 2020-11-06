@@ -2,7 +2,7 @@ FROM archlinux:latest
 
 ENV target v8-r
 
-RUN pacmen -Syu && pacman -S python2 python3 git icu rlwrap
+RUN pacman -Syu && pacman -S python2 python3 git icu rlwrap
 
 RUN git clone https://github.com/JanMarvin/v8-r
 
