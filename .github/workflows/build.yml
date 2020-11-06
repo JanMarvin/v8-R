@@ -8,13 +8,14 @@ name: Building V8
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: ${{ matrix.distro }} / v8-${{ matrix.version }}
+    name: ${{ matrix.distro }} / v8-r-${{ matrix.version }}-${{ matrix.pkgver }}
 
     strategy:
       fail-fast: false
       matrix:
         distro: [ 'arch' ]
         version: [ '8.8.243' ]
+        pkgver: [ '1' ]
 
     steps:
       - name: checkout
@@ -27,11 +28,11 @@ jobs:
       - name: copy
         run: |
           docker run -d --name myrun mybuild
-          docker cp myrun:/home/archie/v8-r-${{ matrix.version }}-x86_64.tar.zst .
+          docker cp myrun:/home/archie/v8-r/v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst .
           docker stop myrun
 
       - name: store
         uses: actions/upload-artifact@v2
         with:
-          name: v8-r-${{ matrix.version }}.tar.zst
-          path: v8-r-${{ matrix.version }}-x86_64.tar.xz
+          name: v8-r-${{ matrix.version }}-${{ matrix.pkgver }}
+          path: v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
