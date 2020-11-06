@@ -1,0 +1,36 @@
+on:
+  push:
+    branches:
+      - master
+
+name: Building V8
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: ${{ matrix.distro }} / v8-${{ matrix.version }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [ 'arch' ]
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: build
+        run: |
+          docker build -t mybuild
+
+      - name: copy
+        run: |
+          docker run -d --name myrun mybuild
+          docker cp myrun:/"v8-r-*-x86_64.tar.zst" .
+          docker stop myrun
+
+      - name: store
+        uses: actions/upload-artifact@v2
+        with:
+          name: "v8-r-*.tar.zst"
+          path: "v8-r-*.tar.xz"
