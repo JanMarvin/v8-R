@@ -8,7 +8,9 @@ RUN useradd -m archie
 
 USER archie
 
-RUN git clone https://github.com/JanMarvin/v8-r && \
-    cd v8-r && \
-    makepkg
+RUN git clone https://github.com/JanMarvin/v8-r 
+
+WORKDIR v8-r
+
+RUN makepkg
 
