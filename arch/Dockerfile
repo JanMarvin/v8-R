@@ -2,11 +2,11 @@ FROM archlinux:latest
 
 ENV target v8-r
 
-RUN pacman -Syu --noconfirm && pacman -S python2 python3 git rlwrap --noconfirm
+RUN pacman -Syu --noconfirm && pacman -S python2 python3 git sudo rlwrap --noconfirm
 
 RUN useradd -m archie
 
-RUN su archie
+RUN sudo -u archie -s
 
 RUN git clone https://github.com/JanMarvin/v8-r
 
