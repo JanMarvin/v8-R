@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         distro: [ 'arch' ]
-        version: [ '8.8.243' ]
+        version: [ '8.8.294' ]
         pkgver: [ '1' ]
 
     steps:
@@ -29,10 +29,13 @@ jobs:
         run: |
           docker run -d --name myrun mybuild
           docker cp myrun:/home/archie/v8-r/v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst .
+          docker cp myrun:/home/archie/v8-r/v8-r.sha256sum ./v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
           docker stop myrun
 
       - name: store
         uses: actions/upload-artifact@v2
         with:
           name: v8-r-${{ matrix.version }}-${{ matrix.pkgver }}
-          path: v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
+          path: | 
+            v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst 
+            v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar

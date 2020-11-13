@@ -16,3 +16,5 @@ WORKDIR /home/archie/v8-r
 
 RUN makepkg
 
+RUN sha256sum "v8-r-*-x86_64.pkg.tar.zst" > v8-r.sha256sum
+
