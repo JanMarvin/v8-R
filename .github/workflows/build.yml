@@ -46,8 +46,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ matrix.version }}
-          release_name: Release ${{ matrix.version }}
+          tag_name: ${{ matrix.version }}-${{ matrix.pkgver }}
+          release_name: Release ${{ matrix.version }}-${{ matrix.pkgver }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
@@ -57,7 +57,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: ./v8-r-${{ matrix.version }}-${{ matrix.pkgver }}.zip
-          asset_name: v8-r-${{ matrix.version }}-${{ matrix.pkgver }}.zip
-          asset_content_type: application/zip
+          asset_path: ./v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
+          asset_name: v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
+          asset_content_type: application/zstd
 
