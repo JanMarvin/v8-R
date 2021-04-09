@@ -10,7 +10,7 @@ USER archie
 
 WORKDIR /home/archie
 
-RUN git clone https://github.com/JanMarvin/v8-r 
+RUN git clone https://github.com/JanMarvin/v8-r && cd v8-r && git checkout devel
 
 WORKDIR /home/archie/v8-r
 
