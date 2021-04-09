@@ -1,0 +1,63 @@
+on:
+  push:
+    branches:
+      - master
+
+name: Building V8
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: ${{ matrix.distro }} / v8-r-${{ matrix.version }}-${{ matrix.pkgver }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [ 'arch' ]
+        version: [ '9.1.269.3' ]
+        pkgver: [ '1' ]
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: build
+        run: |
+          docker build ${{ matrix.distro }} -t mybuild
+
+      - name: copy
+        run: |
+          docker run -d --name myrun mybuild
+          docker cp myrun:/home/archie/v8-r/v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst .
+          docker cp myrun:/home/archie/v8-r/v8-r.sha256sum ./v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.sha256sum
+          docker stop myrun
+
+      - name: store
+        uses: actions/upload-artifact@v2
+        with:
+          name: v8-r-${{ matrix.version }}-${{ matrix.pkgver }}
+          path: | 
+            v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.*
+ 
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ matrix.version }}-${{ matrix.pkgver }}
+          release_name: Release ${{ matrix.version }}-${{ matrix.pkgver }}
+          draft: false
+          prerelease: true
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          asset_path: ./v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
+          asset_name: v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
+          asset_content_type: application/zstd
+
