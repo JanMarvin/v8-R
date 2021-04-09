@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - master
+      - devel
 
 name: Building V8
 
