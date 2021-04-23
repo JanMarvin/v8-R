@@ -8,7 +8,7 @@
 
 pkgname=v8-r
 pkgver=9.1.113
-pkgrel=1
+pkgrel=2
 pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
 url="https://v8.dev"
