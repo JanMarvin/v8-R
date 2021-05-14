@@ -2,7 +2,7 @@ FROM archlinux:latest
 
 ENV target v8-r
 
-RUN pacman -Syu --noconfirm && pacman -S base-devel python2 python3 git rlwrap --noconfirm
+RUN pacman -Syu --noconfirm && pacman -S base-devel git icu lld python2 python3 rlwrap --noconfirm
 
 RUN useradd -m archie
 
