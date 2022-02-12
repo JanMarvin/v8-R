@@ -15,7 +15,7 @@ jobs:
       matrix:
         distro: [ 'arch' ]
         version: [ '10.0.119' ]
-        pkgver: [ '1' ]
+        pkgver: [ '2' ]
 
     steps:
       - name: checkout
