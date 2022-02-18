@@ -14,8 +14,8 @@ jobs:
       fail-fast: false
       matrix:
         distro: [ 'arch' ]
-        version: [ '10.0.119' ]
-        pkgver: [ '2' ]
+        version: [ '10.0.139.1' ]
+        pkgver: [ '1' ]
 
     steps:
       - name: checkout
