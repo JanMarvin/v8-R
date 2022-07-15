@@ -80,7 +80,7 @@ prepare() {
             v8_generate_external_defines_header=true
             v8_enable_i18n_support=true
             v8_enable_object_print=true
-            v8_enable_sandbox=false
+            v8_enable_sandbox=true
             v8_enable_verify_heap=true
             v8_use_external_startup_data=false
             dcheck_always_on=false'
