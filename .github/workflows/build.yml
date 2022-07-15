@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - enable-sandbox
 
 name: Building V8
 
@@ -58,6 +58,6 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
           asset_path: ./v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
-          asset_name: v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
+          asset_name: v8-r-sb-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
           asset_content_type: application/zstd
 
