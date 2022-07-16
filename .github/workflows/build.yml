@@ -8,7 +8,7 @@ name: Building V8
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: ${{ matrix.distro }} / v8-r-${{ matrix.version }}-${{ matrix.pkgver }}
+    name: ${{ matrix.distro }} / v8-r-sb-${{ matrix.version }}-${{ matrix.pkgver }}
 
     strategy:
       fail-fast: false
@@ -46,7 +46,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ matrix.version }}-${{ matrix.pkgver }}
-          release_name: Release ${{ matrix.version }}-${{ matrix.pkgver }}
+          release_name: Release ${{ matrix.version }}-${{ matrix.pkgver }}-sb
           draft: false
           prerelease: true
 
