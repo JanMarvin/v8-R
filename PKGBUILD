@@ -6,9 +6,9 @@
 # Contributor: tocer <tocer.deng@gmail.com>
 # Contributor: David Flemström <david.flemstrom@gmail.com>
 
-pkgname=v8-r
+pkgname=v8-r-sb
 pkgver=10.5.189
-pkgrel=1
+pkgrel=2
 pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
 url="https://v8.dev"

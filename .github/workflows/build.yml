@@ -15,7 +15,7 @@ jobs:
       matrix:
         distro: [ 'arch' ]
         version: [ '10.5.189' ]
-        pkgver: [ '1' ]
+        pkgver: [ '2' ]
 
     steps:
       - name: checkout
@@ -48,7 +48,7 @@ jobs:
           tag_name: ${{ matrix.version }}-${{ matrix.pkgver }}
           release_name: Release ${{ matrix.version }}-${{ matrix.pkgver }}
           draft: false
-          prerelease: false
+          prerelease: true
 
       - name: Upload Release Asset
         id: upload-release-asset 
@@ -57,7 +57,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: ./v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
+          asset_path: ./v8-r-sb-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
           asset_name: v8-r-sb-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
           asset_content_type: application/zstd
 
