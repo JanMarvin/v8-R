@@ -2,7 +2,7 @@ FROM archlinux:latest
 
 ENV target v8-r
 
-RUN pacman -Syu --noconfirm && pacman -S base-devel git icu lld python2 python3 rlwrap --noconfirm
+RUN pacman -Syu --noconfirm && pacman -S base-devel git icu lld python3 rlwrap --noconfirm
 
 RUN useradd -m archie
 
@@ -16,5 +16,5 @@ WORKDIR /home/archie/v8-r
 
 RUN makepkg
 
-RUN sha256sum v8-r-*-x86_64.pkg.tar.zst > v8-r.sha256sum
+RUN sha256sum v8-r-sb-*-x86_64.pkg.tar.zst > v8-r-sb.sha256sum
 

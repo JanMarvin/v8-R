@@ -29,7 +29,7 @@ jobs:
         run: |
           docker run -d --name myrun mybuild
           docker cp myrun:/home/archie/v8-r/v8-r-sb-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst .
-          docker cp myrun:/home/archie/v8-r/v8-r.sha256sum ./v8-r-sb-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.sha256sum
+          docker cp myrun:/home/archie/v8-r/v8-r-sb.sha256sum ./v8-r-sb-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.sha256sum
           docker stop myrun
 
       - name: store
