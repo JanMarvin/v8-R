@@ -7,7 +7,7 @@
 # Contributor: David Flemström <david.flemstrom@gmail.com>
 
 pkgname=v8-r
-pkgver=10.9.121
+pkgver=10.9.147
 pkgrel=1
 pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
@@ -22,14 +22,12 @@ source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot
         "v8.pc"
         "v8_libbase.pc"
         "v8_libplatform.pc"
-        "d8"
-        "snapshot-table-header.diff")
+        "d8")
 sha256sums=('SKIP'
             '3616bcfb15af7cd5a39bc0f223b2a52f15883a4bc8cfcfb291837c7421363d75'
             'efb37bd706e6535abfa20c77bb16597253391619dae275627312d00ee7332fa3'
             'ae23d543f655b4d8449f98828d0aff6858a777429b9ebdd2e23541f89645d4eb'
-            '6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0'
-            'a73db4f8dd03b6d867d01023d319fce35069ce74ec273c77b0c3d8db3f037564')
+            '6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0')
 
 OUTFLD=x64.release
 
@@ -99,8 +97,6 @@ build() {
   export PATH=`pwd`/depot_tools:"$PATH"
 
   cd $srcdir/v8
-
-  git apply ${srcdir}/snapshot-table-header.diff
 
   msg2 "Building"
   ninja -C $OUTFLD
