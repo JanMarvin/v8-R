@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         distro: [ 'arch' ]
-        version: [ '11.4.73' ]
+        version: [ '11.4.94' ]
         pkgver: [ '1' ]
 
     steps:
@@ -46,8 +46,10 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ matrix.version }}-${{ matrix.pkgver }}
-          release_name: Release ${{ matrix.version }}-${{ matrix.pkgver }}
+          name: Release ${{ matrix.version }}-${{ matrix.pkgver }}
           draft: false
-          prerelease: true
+          prerelease: false
           files: |
             v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
+            v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.sha256sum
+
