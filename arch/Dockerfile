@@ -14,6 +14,8 @@ RUN git clone https://github.com/JanMarvin/v8-r
 
 WORKDIR /home/archie/v8-r
 
+RUN git config --global http.postBuffer 524288000
+
 RUN makepkg
 
 RUN sha256sum v8-r-*-x86_64.pkg.tar.zst > v8-r.sha256sum
