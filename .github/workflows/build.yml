@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         distro: [ 'arch' ]
-        version: [ '11.6.57' ]
+        version: [ '11.6.105' ]
         pkgver: [ '1' ]
 
     steps:
