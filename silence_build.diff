@@ -1,0 +1,12 @@
+diff --git a/BUILD.gn b/BUILD.gn
+index b19de4038bc..b485833a0c8 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -1528,6 +1528,7 @@ config("toolchain") {
+       # implementation defined (rather than UB), and our supported compilers
+       # have the expected reasonable behaviour.
+       "-Wno-invalid-offsetof",
++      "-Wno-deprecated",
+     ]
+   }
+ 

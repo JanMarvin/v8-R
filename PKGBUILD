@@ -7,7 +7,7 @@
 # Contributor: David Flemström <david.flemstrom@gmail.com>
 
 pkgname=v8-r
-pkgver=12.8.166
+pkgver=12.8.238
 pkgrel=1
 pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
@@ -16,7 +16,7 @@ license=('BSD')
 depends=('icu')
 optional=('rlwrap')
 options=(!debug)
-makedepends=('procps-ng' 'git' 'lld' 'python3')
+makedepends=('clang' 'procps-ng' 'git' 'lld' 'llvm' 'python3')
 conflicts=('v8' 'v8-3.14' 'v8.3.14-bin' 'v8-6.7-static' 'v8-static-gyp' 'v8-static-gyp-5.4')
 provides=('v8')
 source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot_tools.git"
@@ -24,13 +24,15 @@ source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot
         "v8_libbase.pc"
         "v8_libplatform.pc"
         "d8"
-        "include_ifdef.diff")
+        "include_ifdef.diff"
+        "silence_build.diff")
 sha256sums=('SKIP'
             'aa704f4549d240b568304e30714e042f6da41b39847949c1018652acf07942a9'
             'efb37bd706e6535abfa20c77bb16597253391619dae275627312d00ee7332fa3'
             'ae23d543f655b4d8449f98828d0aff6858a777429b9ebdd2e23541f89645d4eb'
             '6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0'
-            'f6056910ce7a6379060a35ba2d6e5a67c7bdf15dc0c25f6864b08dadb98f4167')
+            'f6056910ce7a6379060a35ba2d6e5a67c7bdf15dc0c25f6864b08dadb98f4167'
+            '746b8fb9281695d067d0e14ce9ec6c4ed699e7d25541b853943d6a0995d5ce28')
 
 OUTFLD=x64.release
 
@@ -63,6 +65,8 @@ prepare() {
 
   # fix build
   git apply ${srcdir}/include_ifdef.diff
+  # silence warnings
+  git apply ${srcdir}/silence_build.diff
 
   # provide pkgconfig files
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8.pc"
@@ -74,7 +78,7 @@ prepare() {
     -vv --fail-on-unused-args \
     --args='dcheck_always_on=false
             is_asan=false
-            is_clang=false
+            is_clang=true
             is_component_build=true
             is_debug=false
             is_official_build=false
@@ -99,6 +103,10 @@ prepare() {
 }
 
 build() {
+
+  export CC=/usr/bin/clang
+  export CXX=/usr/bin/clang++
+
   export PATH=`pwd`/depot_tools:"$PATH"
 
   cd $srcdir/v8
