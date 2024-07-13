@@ -7,7 +7,7 @@
 # Contributor: David Flemström <david.flemstrom@gmail.com>
 
 pkgname=v8-r
-pkgver=12.8.238
+pkgver=12.8.306
 pkgrel=1
 pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
@@ -16,7 +16,7 @@ license=('BSD')
 depends=('icu')
 optional=('rlwrap')
 options=(!debug)
-makedepends=('clang' 'procps-ng' 'git' 'lld' 'llvm' 'python3')
+makedepends=('procps-ng' 'git' 'lld' 'python3')
 conflicts=('v8' 'v8-3.14' 'v8.3.14-bin' 'v8-6.7-static' 'v8-static-gyp' 'v8-static-gyp-5.4')
 provides=('v8')
 source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot_tools.git"
@@ -32,7 +32,7 @@ sha256sums=('SKIP'
             'ae23d543f655b4d8449f98828d0aff6858a777429b9ebdd2e23541f89645d4eb'
             '6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0'
             'f6056910ce7a6379060a35ba2d6e5a67c7bdf15dc0c25f6864b08dadb98f4167'
-            '746b8fb9281695d067d0e14ce9ec6c4ed699e7d25541b853943d6a0995d5ce28')
+            'cb7eb20b6b0558a75a1862e6b9eb2414f1c2b981afca2e9e5208b23748849688')
 
 OUTFLD=x64.release
 
@@ -78,7 +78,7 @@ prepare() {
     -vv --fail-on-unused-args \
     --args='dcheck_always_on=false
             is_asan=false
-            is_clang=true
+            is_clang=false
             is_component_build=true
             is_debug=false
             is_official_build=false
@@ -103,9 +103,6 @@ prepare() {
 }
 
 build() {
-
-  export CC=/usr/bin/clang
-  export CXX=/usr/bin/clang++
 
   export PATH=`pwd`/depot_tools:"$PATH"
 

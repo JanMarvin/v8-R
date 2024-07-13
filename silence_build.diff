@@ -1,5 +1,5 @@
 diff --git a/BUILD.gn b/BUILD.gn
-index b19de4038bc..b485833a0c8 100644
+index 7f333889e0c..c4a0c495226 100644
 --- a/BUILD.gn
 +++ b/BUILD.gn
 @@ -1528,6 +1528,7 @@ config("toolchain") {
@@ -7,6 +7,18 @@ index b19de4038bc..b485833a0c8 100644
        # have the expected reasonable behaviour.
        "-Wno-invalid-offsetof",
 +      "-Wno-deprecated",
+     ]
+   }
+ 
+@@ -1735,6 +1736,11 @@ config("toolchain") {
+       # Disable dangling pointer warnings, which are often false positives when
+       # using scopes.
+       "-Wno-dangling-pointer",
++
++      # Disable warning that is spamming a lot ...
++      "-Wno-template-id-cdtor",
++      "-Wno-uninitialized",
++      "-Wno-dangling-reference",
      ]
    }
  

@@ -1,15 +1,13 @@
 pkgbase = v8-r
 	pkgdesc = Google's open source JavaScript and WebAssembly engine
-	pkgver = 12.8.238
+	pkgver = 12.8.306
 	pkgrel = 1
 	url = https://v8.dev
 	arch = x86_64
 	license = BSD
-	makedepends = clang
 	makedepends = procps-ng
 	makedepends = git
 	makedepends = lld
-	makedepends = llvm
 	makedepends = python3
 	depends = icu
 	provides = v8
@@ -33,6 +31,6 @@ pkgbase = v8-r
 	sha256sums = ae23d543f655b4d8449f98828d0aff6858a777429b9ebdd2e23541f89645d4eb
 	sha256sums = 6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0
 	sha256sums = f6056910ce7a6379060a35ba2d6e5a67c7bdf15dc0c25f6864b08dadb98f4167
-	sha256sums = 746b8fb9281695d067d0e14ce9ec6c4ed699e7d25541b853943d6a0995d5ce28
+	sha256sums = cb7eb20b6b0558a75a1862e6b9eb2414f1c2b981afca2e9e5208b23748849688
 
 pkgname = v8-r

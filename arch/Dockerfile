@@ -2,10 +2,7 @@ FROM archlinux:latest
 
 ENV target v8-r
 
-RUN pacman -Syu --noconfirm && pacman -S base-devel clang git icu lld llvm python3 rlwrap --noconfirm
-
-ENV CC /usr/bin/clang
-ENV CXX /usr/bin/clang++
+RUN pacman -Syu --noconfirm && pacman -S base-devel git icu lld python3 rlwrap --noconfirm
 
 RUN useradd -m archie
 
