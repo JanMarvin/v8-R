@@ -14,7 +14,7 @@ RUN git clone https://github.com/JanMarvin/v8-r
 
 WORKDIR /home/archie/v8-r
 
-RUN git checkout testing
+# RUN git checkout testing
 
 RUN git config --global http.postBuffer 524288000
 
