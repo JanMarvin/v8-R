@@ -7,7 +7,7 @@
 # Contributor: David Flemström <david.flemstrom@gmail.com>
 
 pkgname=v8-r
-pkgver=13.4.114.4
+pkgver=13.5.72
 pkgrel=1
 pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
@@ -16,7 +16,7 @@ license=('BSD')
 depends=('icu')
 optional=('rlwrap')
 options=(!debug)
-makedepends=('procps-ng' 'git' 'lld' 'python3')
+makedepends=('clang' 'procps-ng' 'git' 'libc++' 'lld' 'llvm' 'python3')
 conflicts=('v8' 'v8-3.14' 'v8.3.14-bin' 'v8-6.7-static' 'v8-static-gyp' 'v8-static-gyp-5.4')
 provides=('v8')
 source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot_tools.git"
@@ -24,12 +24,14 @@ source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot
         "v8_libbase.pc"
         "v8_libplatform.pc"
         "d8"
+        "compiler-rt-adjust-paths.patch"
         "silence_build.diff")
 sha256sums=('SKIP'
             'aa704f4549d240b568304e30714e042f6da41b39847949c1018652acf07942a9'
             'efb37bd706e6535abfa20c77bb16597253391619dae275627312d00ee7332fa3'
             'ae23d543f655b4d8449f98828d0aff6858a777429b9ebdd2e23541f89645d4eb'
             '6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0'
+            'b3de01b7df227478687d7517f61a777450dca765756002c80c4915f271e2d961'
             '8429c19062bff535e5af1399e9a40383dd7b6421f395abad5879fe92be99ae66')
 
 OUTFLD=x64.release
@@ -63,24 +65,32 @@ prepare() {
 
   # silence warnings
   git apply ${srcdir}/silence_build.diff
+  git apply ${srcdir}/compiler-rt-adjust-paths.patch
 
   # provide pkgconfig files
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8.pc"
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8_libbase.pc"
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8_libplatform.pc"
 
+
+  local _clang_version=$(clang --version | grep -m1 version | sed 's/.* \([0-9]\+\).*/\1/')
+
   msg2 "Running GN..."
   gn gen $OUTFLD \
     -vv --fail-on-unused-args \
-    --args='dcheck_always_on=false
+    --args="clang_base_path=\"/usr\"
+            clang_use_chrome_plugins=false
+            clang_version=\"$_clang_version\"
+            dcheck_always_on=false
             is_asan=false
-            is_clang=false
+            is_clang=true
             is_component_build=true
             is_debug=false
             is_official_build=false
             treat_warnings_as_errors=false
             use_custom_libcxx=false
             use_lld=true
+            use_glib=false
             use_sysroot=false
             icu_use_data_file=false
             v8_enable_backtrace=true
@@ -90,7 +100,8 @@ prepare() {
             v8_enable_sandbox=true
             v8_enable_static_roots=true
             v8_enable_verify_heap=true
-            v8_use_external_startup_data=false'
+            v8_use_external_startup_data=false
+            v8_verify_torque_generation_invariance=false"
 
   # Fixes bug in generate_shim_headers.py that fails to create these dirs
   msg2 "Adding icu missing folders"
@@ -100,6 +111,13 @@ prepare() {
 }
 
 build() {
+
+  export CC=clang
+  export CXX=clang++
+  CXXFLAGS+='-stdlib=libc++'
+
+  CFLAGS+='   -Wno-unknown-warning-option'
+  CXXFLAGS+=' -Wno-unknown-warning-option'
 
   export PATH=`pwd`/depot_tools:"$PATH"
 

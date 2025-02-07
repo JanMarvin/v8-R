@@ -3,6 +3,7 @@ on:
     branches:
       - main
       - testing
+      - clang
 
 name: Building V8
 
@@ -15,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         distro: [ 'arch' ]
-        version: [ '13.4.114.4' ]
+        version: [ '13.5.72' ]
         pkgver: [ '1' ]
 
     steps:
@@ -47,7 +48,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ matrix.version }}-${{ matrix.pkgver }}
           name: Release ${{ matrix.version }}-${{ matrix.pkgver }}
-          draft: false
+          draft: true
           prerelease: false
           files: |
             v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
