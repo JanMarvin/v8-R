@@ -16,7 +16,7 @@ license=('BSD')
 depends=('icu')
 optional=('rlwrap')
 options=(!debug)
-makedepends=('procps-ng' 'git' 'lld' 'python3')
+makedepends=('clang' 'procps-ng' 'git' 'libc++' 'lld' 'llvm' 'python3')
 conflicts=('v8' 'v8-3.14' 'v8.3.14-bin' 'v8-6.7-static' 'v8-static-gyp' 'v8-static-gyp-5.4')
 provides=('v8')
 source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot_tools.git"
@@ -24,12 +24,14 @@ source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot
         "v8_libbase.pc"
         "v8_libplatform.pc"
         "d8"
+        "compiler-rt-adjust-paths.patch"
         "silence_build.diff")
 sha256sums=('SKIP'
             'aa704f4549d240b568304e30714e042f6da41b39847949c1018652acf07942a9'
             'efb37bd706e6535abfa20c77bb16597253391619dae275627312d00ee7332fa3'
             'ae23d543f655b4d8449f98828d0aff6858a777429b9ebdd2e23541f89645d4eb'
             '6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0'
+            'b3de01b7df227478687d7517f61a777450dca765756002c80c4915f271e2d961'
             '8429c19062bff535e5af1399e9a40383dd7b6421f395abad5879fe92be99ae66')
 
 OUTFLD=x64.release
@@ -63,23 +65,31 @@ prepare() {
 
   # silence warnings
   git apply ${srcdir}/silence_build.diff
+  git apply ${srcdir}/compiler-rt-adjust-paths.patch
 
   # provide pkgconfig files
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8.pc"
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8_libbase.pc"
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8_libplatform.pc"
 
+  # Increase _FORTIFY_SOURCE level to match Arch's default flags
+  sed -i 's/fortify_level = "2"/fortify_level = "3"/' ${srcdir}/v8/build/config/compiler/BUILD.gn
+
+  local _clang_version=$(clang --version | grep -m1 version | sed 's/.* \([0-9]\+\).*/\1/')
+
   msg2 "Running GN..."
   gn gen $OUTFLD \
     -vv --fail-on-unused-args \
-    --args='dcheck_always_on=false
+    --args="clang_base_path=\"/usr\"
+            clang_use_chrome_plugins=false
+            clang_version=\"$_clang_version\"
             is_asan=false
-            is_clang=false
+            is_clang=true
             is_component_build=true
             is_debug=false
             is_official_build=false
             treat_warnings_as_errors=false
-            use_custom_libcxx=false
+            use_custom_libcxx=true
             use_lld=true
             use_sysroot=false
             icu_use_data_file=false
@@ -90,7 +100,7 @@ prepare() {
             v8_enable_sandbox=true
             v8_enable_static_roots=true
             v8_enable_verify_heap=true
-            v8_use_external_startup_data=false'
+            v8_use_external_startup_data=false"
 
   # Fixes bug in generate_shim_headers.py that fails to create these dirs
   msg2 "Adding icu missing folders"
@@ -100,6 +110,39 @@ prepare() {
 }
 
 build() {
+
+  export CC=clang
+  export CXX=clang++
+  export AR=ar
+  export NM=nm
+
+  # Facilitate deterministic builds (taken from build/config/compiler/BUILD.gn)
+  CFLAGS+='   -Wno-builtin-macro-redefined'
+  CXXFLAGS+=' -Wno-builtin-macro-redefined'
+  CPPFLAGS+=' -D__DATE__=  -D__TIME__=  -D__TIMESTAMP__='
+
+  # Do not warn about unknown warning options
+  CFLAGS+='   -Wno-unknown-warning-option'
+  CXXFLAGS+=' -Wno-unknown-warning-option'
+
+  # Let Chromium set its own symbol level
+  CFLAGS=${CFLAGS/-g }
+  CXXFLAGS=${CXXFLAGS/-g }
+
+  # https://github.com/ungoogled-software/ungoogled-chromium-archlinux/issues/123
+  CFLAGS=${CFLAGS/-fexceptions}
+  CFLAGS=${CFLAGS/-fcf-protection}
+  CXXFLAGS=${CXXFLAGS/-fexceptions}
+  CXXFLAGS=${CXXFLAGS/-fcf-protection}
+
+  # This appears to cause random segfaults when combined with ThinLTO
+  # https://bugs.archlinux.org/task/73518
+  CFLAGS=${CFLAGS/-fstack-clash-protection}
+  CXXFLAGS=${CXXFLAGS/-fstack-clash-protection}
+
+  # https://crbug.com/957519#c122
+  CXXFLAGS=${CXXFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS}
+
 
   export PATH=`pwd`/depot_tools:"$PATH"
 
@@ -121,55 +164,37 @@ check() {
 package() {
   cd $srcdir/v8
 
-  msg2 "start"
   install -d ${pkgdir}/usr/lib/v8
   install -Dm755 ${srcdir}/d8 ${pkgdir}/usr/bin/d8
 
-  msg2 "1"
   install -Dm755 $OUTFLD/d8 ${pkgdir}/usr/lib/v8/d8
-
-  msg2 "2"
   install -Dm755 $OUTFLD/libv8.so ${pkgdir}/usr/lib/libv8.so
-
-  msg2 "3"
   install -Dm755 $OUTFLD/libv8_libbase.so ${pkgdir}/usr/lib/libv8_libbase.so
- 
-  msg2 "4"
   install -Dm755 $OUTFLD/libv8_libplatform.so ${pkgdir}/usr/lib/libv8_libplatform.so
- 
-  msg2 "5"
   install -Dm755 $OUTFLD/libchrome_zlib.so ${pkgdir}/usr/lib/libchrome_zlib.so
-  
-  msg2 "6"
   install -Dm755 $OUTFLD/libthird_party_abseil-cpp_absl.so ${pkgdir}/usr/lib/libthird_party_abseil-cpp_absl.so
 
   # install -Dm755 $OUTFLD/cctest ${pkgdir}/usr/lib/v8/cctest
   # install -Dm755 $OUTFLD/libv8_for_testing.so ${pkgdir}/usr/lib/libv8_for_testing.so
   # install -Dm755 $OUTFLD/libv8_debug_helper.so ${pkgdir}/usr/lib/libv8_debug_helper.so
 
-  msg2 "7"
   install -d ${pkgdir}/usr/include
   install -Dm644 include/*.h ${pkgdir}/usr/include
 
-  msg2 "8"
   install -d ${pkgdir}/usr/include/cppgc
   install -Dm644 include/cppgc/*.h ${pkgdir}/usr/include/cppgc
 
-  msg2 "9"
   install -d ${pkgdir}/usr/include/cppgc/internal
   install -Dm644 include/cppgc/internal/*.h ${pkgdir}/usr/include/cppgc/internal
 
-  msg2 "10"
   install -d ${pkgdir}/usr/include/libplatform
   install -Dm644 include/libplatform/*.h ${pkgdir}/usr/include/libplatform
 
-  msg2 "11"
   install -d ${pkgdir}/usr/lib/pkgconfig
   install -m644 $srcdir/v8.pc ${pkgdir}/usr/lib/pkgconfig
   install -m644 $srcdir/v8_libbase.pc ${pkgdir}/usr/lib/pkgconfig
   install -m644 $srcdir/v8_libplatform.pc ${pkgdir}/usr/lib/pkgconfig
 
-  msg2 "12"
   install -d ${pkgdir}/usr/share/licenses/v8
   install -m644 LICENSE* ${pkgdir}/usr/share/licenses/v8
 
