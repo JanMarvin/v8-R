@@ -121,37 +121,55 @@ check() {
 package() {
   cd $srcdir/v8
 
+  msg2 "start"
   install -d ${pkgdir}/usr/lib/v8
   install -Dm755 ${srcdir}/d8 ${pkgdir}/usr/bin/d8
 
+  msg2 "1"
   install -Dm755 $OUTFLD/d8 ${pkgdir}/usr/lib/v8/d8
+
+  msg2 "2"
   install -Dm755 $OUTFLD/libv8.so ${pkgdir}/usr/lib/libv8.so
+
+  msg2 "3"
   install -Dm755 $OUTFLD/libv8_libbase.so ${pkgdir}/usr/lib/libv8_libbase.so
+ 
+  msg2 "4"
   install -Dm755 $OUTFLD/libv8_libplatform.so ${pkgdir}/usr/lib/libv8_libplatform.so
+ 
+  msg2 "5"
   install -Dm755 $OUTFLD/libchrome_zlib.so ${pkgdir}/usr/lib/libchrome_zlib.so
+  
+  msg2 "6"
   install -Dm755 $OUTFLD/libthird_party_abseil-cpp_absl.so ${pkgdir}/usr/lib/libthird_party_abseil-cpp_absl.so
 
   # install -Dm755 $OUTFLD/cctest ${pkgdir}/usr/lib/v8/cctest
   # install -Dm755 $OUTFLD/libv8_for_testing.so ${pkgdir}/usr/lib/libv8_for_testing.so
   # install -Dm755 $OUTFLD/libv8_debug_helper.so ${pkgdir}/usr/lib/libv8_debug_helper.so
 
+  msg2 "7"
   install -d ${pkgdir}/usr/include
   install -Dm644 include/*.h ${pkgdir}/usr/include
 
+  msg2 "8"
   install -d ${pkgdir}/usr/include/cppgc
   install -Dm644 include/cppgc/*.h ${pkgdir}/usr/include/cppgc
 
+  msg2 "9"
   install -d ${pkgdir}/usr/include/cppgc/internal
   install -Dm644 include/cppgc/internal/*.h ${pkgdir}/usr/include/cppgc/internal
 
+  msg2 "10"
   install -d ${pkgdir}/usr/include/libplatform
   install -Dm644 include/libplatform/*.h ${pkgdir}/usr/include/libplatform
 
+  msg2 "11"
   install -d ${pkgdir}/usr/lib/pkgconfig
   install -m644 $srcdir/v8.pc ${pkgdir}/usr/lib/pkgconfig
   install -m644 $srcdir/v8_libbase.pc ${pkgdir}/usr/lib/pkgconfig
   install -m644 $srcdir/v8_libplatform.pc ${pkgdir}/usr/lib/pkgconfig
 
+  msg2 "12"
   install -d ${pkgdir}/usr/share/licenses/v8
   install -m644 LICENSE* ${pkgdir}/usr/share/licenses/v8
 
