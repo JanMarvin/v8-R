@@ -13,7 +13,7 @@ pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
 url="https://v8.dev"
 license=('BSD')
-depends=('icu')
+# depends=('icu')
 optional=('rlwrap')
 options=(!debug)
 makedepends=('clang' 'procps-ng' 'git' 'libc++' 'lld' 'llvm' 'python3')
@@ -50,18 +50,18 @@ prepare() {
   msg2 "Reset repository"
   git reset --hard
 
-  if [ -f third_party/icu/BUILD.gn.orig ]
-  then
-      msg2 "Restoring bundled ICU build files for syncing"
-      $srcdir/v8/build/linux/unbundle/replace_gn_files.py --undo --system-libraries icu
-  fi
+  # if [ -f third_party/icu/BUILD.gn.orig ]
+  # then
+  #     msg2 "Restoring bundled ICU build files for syncing"
+  #     $srcdir/v8/build/linux/unbundle/replace_gn_files.py --undo --system-libraries icu
+  # fi
 
   msg2 "Syncing, this can take a while..."
   gclient sync -D --force --reset
   gclient sync --revision ${pkgver}
 
-  msg2 "Using system libraries for ICU"
-  $srcdir/v8/build/linux/unbundle/replace_gn_files.py --system-libraries icu
+  # msg2 "Using system libraries for ICU"
+  # $srcdir/v8/build/linux/unbundle/replace_gn_files.py --system-libraries icu
 
   # silence warnings
   git apply ${srcdir}/silence_build.diff
@@ -102,10 +102,10 @@ prepare() {
             v8_enable_verify_heap=true
             v8_use_external_startup_data=false"
 
-  # Fixes bug in generate_shim_headers.py that fails to create these dirs
-  msg2 "Adding icu missing folders"
-  mkdir -p "$OUTFLD/gen/shim_headers/icuuc_shim/third_party/icu/source/common/unicode/"
-  mkdir -p "$OUTFLD/gen/shim_headers/icui18n_shim/third_party/icu/source/i18n/unicode/"
+  # # Fixes bug in generate_shim_headers.py that fails to create these dirs
+  # msg2 "Adding icu missing folders"
+  # mkdir -p "$OUTFLD/gen/shim_headers/icuuc_shim/third_party/icu/source/common/unicode/"
+  # mkdir -p "$OUTFLD/gen/shim_headers/icui18n_shim/third_party/icu/source/i18n/unicode/"
 
 }
 
