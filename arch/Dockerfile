@@ -1,4 +1,5 @@
-FROM archlinux:latest
+# FROM archlinux:latest
+FROM ghcr.io/archlinux/archlinux:latest
 
 ENV target v8-r
 
@@ -10,11 +11,9 @@ USER archie
 
 WORKDIR /home/archie
 
-RUN git clone https://github.com/JanMarvin/v8-r 
+RUN git clone -b main https://github.com/JanMarvin/v8-r 
 
 WORKDIR /home/archie/v8-r
-
-# RUN git checkout testing
 
 RUN git config --global http.postBuffer 524288000
 
