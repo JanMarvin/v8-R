@@ -16,7 +16,7 @@ jobs:
       matrix:
         distro: [ 'arch' ]
         version: [ '13.9.195' ]
-        pkgver: [ '1' ]
+        pkgver: [ '2' ]
 
     steps:
       - name: checkout
@@ -48,7 +48,7 @@ jobs:
           tag_name: ${{ matrix.version }}-${{ matrix.pkgver }}
           name: Release ${{ matrix.version }}-${{ matrix.pkgver }}
           draft: false
-          prerelease: false
+          prerelease: true
           files: |
             v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
             v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.sha256sum
