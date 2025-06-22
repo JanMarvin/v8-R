@@ -8,7 +8,7 @@
 
 pkgname=v8-r
 pkgver=13.9.195
-pkgrel=1
+pkgrel=2
 pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
 url="https://v8.dev"
@@ -106,7 +106,7 @@ build() {
   cd $srcdir/v8
 
   msg2 "Building"
-  ninja -C $OUTFLD
+  siso -C $OUTFLD
 }
 
 check() {
