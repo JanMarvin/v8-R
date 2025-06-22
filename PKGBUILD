@@ -107,7 +107,7 @@ build() {
 
   msg2 "Building"
   cd $OUTFLD
-  siso
+  siso ninja
 }
 
 check() {
