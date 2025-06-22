@@ -106,7 +106,8 @@ build() {
   cd $srcdir/v8
 
   msg2 "Building"
-  siso $OUTFLD
+  cd $OUTFLD
+  siso
 }
 
 check() {
