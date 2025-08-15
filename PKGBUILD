@@ -16,7 +16,7 @@ license=('BSD')
 depends=('icu')
 optional=('rlwrap')
 options=(!debug)
-makedepends=('procps-ng' 'git' 'lld' 'python3')
+makedepends=('clang' 'procps-ng' 'git' 'lld' 'llvm' 'python3')
 conflicts=('v8' 'v8-3.14' 'v8.3.14-bin' 'v8-6.7-static' 'v8-static-gyp' 'v8-static-gyp-5.4')
 provides=('v8')
 source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot_tools.git"
@@ -24,13 +24,15 @@ source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot
         "v8_libbase.pc"
         "v8_libplatform.pc"
         "d8"
+        "compiler-rt-adjust-paths.patch"
         "silence_build.diff")
 sha256sums=('SKIP'
             'aa704f4549d240b568304e30714e042f6da41b39847949c1018652acf07942a9'
             'efb37bd706e6535abfa20c77bb16597253391619dae275627312d00ee7332fa3'
             'ae23d543f655b4d8449f98828d0aff6858a777429b9ebdd2e23541f89645d4eb'
             '6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0'
-            '49f892b60d30724940519391e2a6d80b107945d05f201292ba60e57e6c5fd54b')
+            '3e63769d9eaaeba0ff88e4228ac9bf62f7b841a3e33dfa65e305005ce71d480c'
+            '4d775a6c3408a7ffaeeb8c2ee7d0d0999cd19af92e5f3ee43a14f96f75a88e27')
 
 OUTFLD=x64.release
 
@@ -63,26 +65,37 @@ prepare() {
 
   # silence warnings
   git apply ${srcdir}/silence_build.diff
+  git apply ${srcdir}/compiler-rt-adjust-paths.patch
 
   # provide pkgconfig files
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8.pc"
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8_libbase.pc"
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8_libplatform.pc"
 
+  # Increase _FORTIFY_SOURCE level to match Arch's default flags
+  sed -i 's/fortify_level = "2"/fortify_level = "3"/' ${srcdir}/v8/build/config/compiler/BUILD.gn
+
+  local _clang_version=$(clang --version | grep -m1 version | sed 's/.* \([0-9]\+\).*/\1/')
+
   msg2 "Running GN..."
   gn gen $OUTFLD \
     -vv --fail-on-unused-args \
-    --args='dcheck_always_on=false
+    --args="clang_base_path=\"/usr\"
+            clang_use_chrome_plugins=false
+            clang_version=\"$_clang_version\"
+            dcheck_always_on=false
+            icu_use_data_file=false
             is_asan=false
-            is_clang=false
+            is_clang=true
             is_component_build=true
             is_debug=false
             is_official_build=false
             treat_warnings_as_errors=false
+            use_clang_modules=false
             use_custom_libcxx=false
             use_lld=true
             use_sysroot=false
-            icu_use_data_file=false
+            symbol_level=0
             v8_enable_backtrace=true
             v8_enable_disassembler=true
             v8_enable_i18n_support=true
@@ -91,7 +104,7 @@ prepare() {
             v8_enable_static_roots=true
             v8_enable_temporal_support=false
             v8_enable_verify_heap=true
-            v8_use_external_startup_data=false'
+            v8_use_external_startup_data=false"
 
   # Fixes bug in generate_shim_headers.py that fails to create these dirs
   msg2 "Adding icu missing folders"
@@ -101,6 +114,11 @@ prepare() {
 }
 
 build() {
+
+  export CC=clang
+  export CXX=clang++
+  export AR=ar
+  export NM=nm
 
   export PATH=`pwd`/depot_tools:"$PATH"
 

@@ -3,6 +3,7 @@ on:
     branches:
       - main
       - testing
+      - clang
 
 name: Building V8
 

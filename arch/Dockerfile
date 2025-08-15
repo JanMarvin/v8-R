@@ -1,9 +1,9 @@
 # FROM archlinux:latest
 FROM ghcr.io/archlinux/archlinux:latest
 
-ENV target v8-r
+ENV target=v8-r
 
-RUN pacman -Syu --noconfirm && pacman -S base-devel git icu lld python3 rlwrap --noconfirm
+RUN pacman -Syu --noconfirm && pacman -S base-devel clang procps-ng git icu lld llvm python3 rlwrap --noconfirm
 
 RUN useradd -m archie
 
@@ -11,7 +11,7 @@ USER archie
 
 WORKDIR /home/archie
 
-RUN git clone -b testing https://github.com/JanMarvin/v8-r 
+RUN git clone -b clang https://github.com/JanMarvin/v8-r 
 
 WORKDIR /home/archie/v8-r
 
