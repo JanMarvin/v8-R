@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         distro: [ 'arch' ]
-        version: [ '14.1.143' ]
+        version: [ '14.2.66' ]
         pkgver: [ '1' ]
 
     steps:
@@ -48,7 +48,7 @@ jobs:
           tag_name: ${{ matrix.version }}-${{ matrix.pkgver }}
           name: Release ${{ matrix.version }}-${{ matrix.pkgver }}
           draft: false
-          prerelease: false
+          prerelease: true
           files: |
             v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.tar.zst
             v8-r-${{ matrix.version }}-${{ matrix.pkgver }}-x86_64.pkg.sha256sum

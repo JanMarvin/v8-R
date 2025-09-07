@@ -11,7 +11,7 @@ USER archie
 
 WORKDIR /home/archie
 
-RUN git clone -b main https://github.com/JanMarvin/v8-r 
+RUN git clone -b testing https://github.com/JanMarvin/v8-r 
 
 WORKDIR /home/archie/v8-r
 
