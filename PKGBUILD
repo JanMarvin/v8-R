@@ -7,7 +7,7 @@
 # Contributor: David Flemström <david.flemstrom@gmail.com>
 
 pkgname=v8-r
-pkgver=14.2.229
+pkgver=14.3.34
 pkgrel=1
 pkgdesc="Google's open source JavaScript and WebAssembly engine"
 arch=('x86_64')
@@ -25,6 +25,7 @@ source=("depot_tools::git+https://chromium.googlesource.com/chromium/tools/depot
         "v8_libplatform.pc"
         "d8"
         "compiler-rt-adjust-paths.patch"
+        "fix_clang.diff"
         "silence_build.diff")
 sha256sums=('SKIP'
             'aa704f4549d240b568304e30714e042f6da41b39847949c1018652acf07942a9'
@@ -32,7 +33,8 @@ sha256sums=('SKIP'
             'ae23d543f655b4d8449f98828d0aff6858a777429b9ebdd2e23541f89645d4eb'
             '6abb07ab1cf593067d19028f385bd7ee52196fc644e315c388f08294d82ceff0'
             '3e63769d9eaaeba0ff88e4228ac9bf62f7b841a3e33dfa65e305005ce71d480c'
-            '4d775a6c3408a7ffaeeb8c2ee7d0d0999cd19af92e5f3ee43a14f96f75a88e27')
+            '6e1456f7235e4059e6343ad8a4332f415564131f6dc7b35f608cec66e2f4430f'
+            '04af20e828ac79ae6b0d38ae7b0bd6a88c398d40e12cebdbccc1e6a885c3b27a')
 
 OUTFLD=x64.release
 
@@ -66,6 +68,7 @@ prepare() {
   # silence warnings
   git apply ${srcdir}/silence_build.diff
   git apply ${srcdir}/compiler-rt-adjust-paths.patch
+  git apply ${srcdir}/fix_clang.diff
 
   # provide pkgconfig files
   sed "s/@VERSION@/${pkgver}/g" -i "${srcdir}/v8.pc"
